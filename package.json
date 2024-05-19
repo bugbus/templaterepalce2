@@ -1,0 +1,24 @@
+{
+  "name": "templatereplace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf code/dist code/tsconfig.tsbuildinfo",
+    "build:code": "tsc -p ./tsconfig.json",
+    "build": "npm run clean && npm run build:code",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@types/jest": "^29.5.12",
+    "rimraf": "^5.0.7",
+    "tsyringe": "^4.8.0"
+  }
+}
