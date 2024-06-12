@@ -1,6 +1,9 @@
+
 import { TokenPatterns } from '../domain/common/TokenPatterns';
 import { TokenType } from '../domain/common/TokenType/TokenType';
 import { IToken } from '../domain/Token/Token';
+import { Token } from '../domain/Token/Token';
+
 
 export class DoInputToToken implements IDoInputToToken {
   private 位置: number = 0;
@@ -8,7 +11,7 @@ export class DoInputToToken implements IDoInputToToken {
   public execute(
     input: string,
     outputPort: IDoInputToTokenOutputPort
-  ):void {
+  ): void {
     const tokens: IToken[] = [];
 
     // while (this.位置 < input.length) {
@@ -60,58 +63,58 @@ export class DoInputToToken implements IDoInputToToken {
 
   public match字符串(input: string): IToken | null {
     const value = input.substring(this.位置)
-    const match = TokenPatterns.token[TokenType.字符串].exec(value);
+    const match = TokenType.字符串.regExp().exec(value);
     if (match) {
       const value = match[0];
       this.位置 += value.length;
-      return { 类型: TokenType.字符串, 值: value.slice(1,-1) };
+      return new Token(TokenType.字符串, value.slice(1, -1));
     }
     return null;
   }
 
   public match数字(input: string): IToken | null {
     const value = input.substring(this.位置)
-    const match = TokenPatterns.token[TokenType.数字].exec(value);
+    const match = TokenType.数字.regExp().exec(value);
     if (match) {
       const value = match[0];
       this.位置 += value.length;
-      return { 类型: TokenType.数字, 值: value };
+      return new Token(TokenType.数字, value);
     }
     return null;
   }
 
   public match标识符(input: string): IToken | null {
     const value = input.substring(this.位置)
-    const match = TokenPatterns.token[TokenType.标识符].exec(value);
+    const match = TokenType.标识符.regExp().exec(value);
     if (match) {
       const value = match[0];
       this.位置 += value.length;
-      return { 类型: TokenType.标识符, 值: value };
+      return new Token(TokenType.标识符, value);
     }
     return null;
   }
 
-  public match匹配空白字符(input: string):boolean {
+  public match匹配空白字符(input: string): boolean {
     const value = input.substring(this.位置)
 
-    const match = TokenPatterns.token[TokenType.空白].exec(value);
+    const match = TokenType.空白.regExp().exec(value);
     if (match) {
       const value = match[0];
-      if(value) this.位置 += value.length;
+      if (value) this.位置 += value.length;
       return true;
     }
     return false;
   }
 
   public handle意外字符(input: string): IToken {
-    return { 类型: TokenType.意外字符, 值: input.charAt(this.位置++) }; 
+    return new Token(TokenType.意外字符, input.charAt(this.位置++));
   }
 
-  public get位置(){
+  public get位置() {
     return this.位置;
   }
 
-  public set位置(num:number){
+  public set位置(num: number) {
     this.位置 = num;
   }
 }

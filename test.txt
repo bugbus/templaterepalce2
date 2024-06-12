@@ -1,1 +1,7 @@
 test
+
+
+npm install
+
+npx jest
+npx jest code/test/DoinputToToken.test.ts
