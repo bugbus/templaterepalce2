@@ -1,43 +1,43 @@
-import { TokenType } from "../../../../../src/core/domain/common/TokenType/TokenType";
+import { TokenTypes } from "../../../../../src/core/domain/common/TokenType/TokenTypes";
 
-describe('TokenType Test', () => {
+describe('TokenTypes Test', () => {
   describe('正则表达式验证', () => {
     afterEach(() => {
 
     });
 
     it('空白', () => {
-      expect(TokenType.空白.regExp()
+      expect(TokenTypes.空白.regExp()
       ).toEqual(/^\s+/);
     })
 
     it('标识符', () => {
-      expect(TokenType.标识符.regExp()
+      expect(TokenTypes.标识符.regExp()
       ).toEqual(/^[a-zA-Z_][a-zA-Z0-9_]*/);
     })
 
     it('数字', () => {
-      expect(TokenType.数字.regExp()
+      expect(TokenTypes.数字.regExp()
       ).toEqual(/^\d+(\.\d+)?/);
     })
 
     it('字符串', () => {
-      expect(TokenType.字符串.regExp()
+      expect(TokenTypes.字符串.regExp()
       ).toEqual(/^("(?:\\.|[^"\\])*")|('(?:\\.|[^"\\])*')/);
     })
     it('运算符', () => {
-      expect(TokenType.运算符.regExp()
+      expect(TokenTypes.运算符.regExp()
       ).toEqual(/[+\-*/=<>!&|]/);
     })
 
     // it('分隔符', () => {
-    //   expect(TokenType.分隔符.regExp()
+    //   expect(TokenTypes.分隔符.regExp()
     //   ).toEqual(/[+\-*/=<>!&|]/);
     // })
 
 
     it('意外字符', () => {
-      expect(TokenType.意外字符.regExp()
+      expect(TokenTypes.意外字符.regExp()
       ).toEqual(/^./);
     })
 

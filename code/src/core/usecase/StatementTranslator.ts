@@ -1,6 +1,6 @@
 
-import { TokenPatterns } from '../domain/common/TokenPatterns';
-import { TokenDelimeters, TokenType } from '../domain/common/TokenType-bk';
+
+import {TokenTypes } from '../domain/common/TokenType/TokenTypes';
 
 import { IToken } from '../domain/Token/Token';
 
@@ -120,14 +120,14 @@ export class StatementTranslator {
 
 
     // 检查下一个标记是否为给定类型
-    private checkToken(类型: string): boolean {
-      return this.currentToken() === TokenPatterns.Of["{"];
+    private checkToken(value: string): boolean {
+      return this.currentToken().类型.is(value);
     }
   
     // 消耗并返回下一个标记，如果类型不匹配则抛出错误
-    private consumeToken(类型: string): IToken {
-      if (!this.checkToken(类型)) {
-        throw new Error(`Expected token: ${类型}, but got: ${this.currentToken().类型}`);
+    private consumeToken(value: string): IToken {
+      if (!this.checkToken(value)) {
+        throw new Error(`Expected token: ${value}, but got: ${this.currentToken().类型}`);
       }
       return this.nextToken();
     }

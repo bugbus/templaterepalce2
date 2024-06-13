@@ -1,10 +1,8 @@
-import { TokenType } from "../../../../../src/core/domain/common/TokenType/TokenType";
 import { TokenDelimeter } from "../../../../../src/core/domain/common/TokenType/TokenDelimeters";
 
 
 describe('TokenDelimeter Test', () => {
   describe('正则表达式验证', () => {
-
 
     it('DEFAULT', () => {
       expect(TokenDelimeter.DEFAULT.regExp()
