@@ -1,5 +1,6 @@
 
 
+import { ASTNode } from '../domain/common/ASTNode/ASTNode';
 import {TokenTypes } from '../domain/common/TokenType/TokenTypes';
 
 import { IToken } from '../domain/Token/Token';
@@ -45,7 +46,7 @@ export class StatementTranslator {
     }
     this.consumeToken('}');
 
-    return new Block(statements);
+    return     new ASTNode.Block('Block', statements);
   }
 
 

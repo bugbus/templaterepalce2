@@ -1,0 +1,176 @@
+class SyntaxAnalyzer {
+  private tokens: Token[]; // 假设你已经定义了一个Token类来表示词法分析器生成的标记
+  private currentTokenIndex: number;
+
+  constructor(tokens: Token[]) {
+    this.tokens = tokens;
+    this.currentTokenIndex = 0;
+  }
+
+  // 解析整个程序
+  public parseProgram(): Program {
+    const statements: Statement[] = [];
+    while (!this.isEndOfFile()) {
+      statements.push(this.parseStatement());
+    }
+    return new Program(statements);
+  }
+
+  // 解析一个语句
+  private parseStatement(): Statement {
+    switch (this.currentToken().type) {
+      case 'left_brace':
+        return this.parseBlock();
+      case 'if_keyword':
+        return this.parseIfStatement();
+      case 'type_keyword':
+        return this.parseVariableDeclaration();
+      case 'for_keyword':
+        return this.parseForLoop();
+      case 'write_keyword':
+        return this.parseWriteStatement();
+      default:
+        throw new Error(`Unexpected token: ${this.currentToken().type}`);
+    }
+  }
+
+  // 解析代码块
+  private parseBlock(): Block {
+    this.consumeToken('left_brace');
+    const statements: Statement[] = [];
+    while (!this.checkToken('right_brace')) {
+      statements.push(this.parseStatement());
+    }
+    this.consumeToken('right_brace');
+    return new Block(statements);
+  }
+
+  // 解析if语句
+  private parseIfStatement(): IfStatement {
+    this.consumeToken('if_keyword');
+    this.consumeToken('left_paren');
+    const condition = this.parseExpression();
+    this.consumeToken('right_paren');
+    const thenBlock = this.parseBlock();
+    let elseBlock: Block | null = null;
+    if (this.checkToken('else_keyword')) {
+      this.consumeToken('else_keyword');
+      elseBlock = this.parseBlock();
+    }
+    return new IfStatement(condition, thenBlock, elseBlock);
+  }
+
+  // 解析变量声明
+  private parseVariableDeclaration(): VariableDeclaration {
+    const type = this.consumeToken('type_keyword').value;
+    const name = this.consumeToken('identifier').value;
+    this.consumeToken('equals');
+    const initializer = this.parseExpression();
+    this.consumeToken('semicolon');
+    return new VariableDeclaration(type, name, initializer);
+  }
+
+  // 解析for循环
+  private parseForLoop(): ForLoop {
+    this.consumeToken('for_keyword');
+    this.consumeToken('left_paren');
+    const initialization = this.parseExpression();
+    this.consumeToken('semicolon');
+    const condition = this.parseExpression();
+    this.consumeToken('semicolon');
+    const update = this.parseExpression();
+    this.consumeToken('right_paren');
+    const body = this.parseBlock();
+    return new ForLoop(initialization, condition, update, body);
+  }
+
+  // 解析写入操作
+  private parseWriteStatement(): WriteStatement {
+    this.consumeToken('write_keyword');
+    this.consumeToken('left_paren');
+    const args: (StringLiteral | Expression)[] = [];
+    while (!this.checkToken('right_paren')) {
+      if (this.currentToken().type === 'string_literal') {
+        args.push(this.parseStringLiteral());
+      } else {
+        args.push(this.parseExpression());
+      }
+      if (!this.checkToken('right_paren')) {
+        this.consumeToken('comma');
+      }
+    }
+    this.consumeToken('right_paren');
+    return new WriteStatement(args);
+  }
+
+  // 解析表达式
+  private parseExpression(): Expression {
+    // 这里应该有更复杂的表达式解析逻辑
+    // 为了简化示例，我们将省略这个方法
+    return new Expression();
+  }
+
+  // 解析字符串字面量
+  private parseStringLiteral(): StringLiteral {
+    return new StringLiteral(this.consumeToken('string_literal').value);
+  }
+
+  // 检查下一个标记是否为给定类型
+  private checkToken(type: string): boolean {
+    return this.currentToken().type === type;
+  }
+
+  // 消耗并返回下一个标记，如果类型不匹配则抛出错误
+  private consumeToken(type: string): Token {
+    if (!this.checkToken(type)) {
+      throw new Error(`Expected token: ${type}, but got: ${this.currentToken().type}`);
+    }
+    return this.nextToken();
+  }
+
+  // 获取当前标记
+  private currentToken(): Token {
+    return this.tokens[this.currentTokenIndex];
+  }
+
+  // 获取下一个标记并前进
+  private nextToken(): Token {
+    return this.tokens[++this.currentTokenIndex];
+  }
+
+  // 检查是否到达文件末尾
+  private isEndOfFile(): boolean {
+    return this.currentTokenIndex >= this.tokens.length;
+  }
+}
+
+// 示例AST节点类
+class Program {
+  constructor(public statements: Statement[]) {}
+}
+
+class Block {
+  constructor(public statements: Statement[]) {}
+}
+
+class IfStatement {
+  constructor(public condition: Expression, public thenBlock: Block, public elseBlock: Block | null) {}
+}
+
+class VariableDeclaration {
+  constructor(public type: string, public name: string, public initializer: Expression) {}
+}
+
+class ForLoop {
+  constructor(public initialization: Expression, public condition: Expression, public update: Expression, public body: Block) {}
+}
+
+class WriteStatement {
+  constructor(public args: (StringLiteral | Expression)[]) {}
+}
+
+class Expression {}
+
+class StringLiteral {
+  constructor(public value: string) {}
+}
