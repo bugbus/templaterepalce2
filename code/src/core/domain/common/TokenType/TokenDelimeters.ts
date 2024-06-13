@@ -12,14 +12,25 @@ export enum TokenDelimeters {
 }
 
 export class TokenDelimeter extends TokenType<TokenDelimeters> {
-  static 左圆括号: TokenDelimeter = this.newInstance("(", TokenDelimeters.左圆括号);
-  static 右圆括号: TokenDelimeter = this.newInstance(")", TokenDelimeters.右圆括号);
-  static 左花括号: TokenDelimeter = this.newInstance("{", TokenDelimeters.左花括号);
-  static 右花括号: TokenDelimeter = this.newInstance("}", TokenDelimeters.右花括号);
-  static 冒号: TokenDelimeter = this.newInstance(":", TokenDelimeters.冒号);
-  static 逗号: TokenDelimeter = this.newInstance(",", TokenDelimeters.逗号);
-  static 分号: TokenDelimeter = this.newInstance(";", TokenDelimeters.分号);
-  static DEFAULT: TokenDelimeter = this.newInstance("DEFAULT", TokenDelimeters.DEFAULT);
+  static _左圆括号: TokenDelimeter;
+  static _右圆括号: TokenDelimeter;
+  static _左花括号: TokenDelimeter;
+  static _右花括号: TokenDelimeter;
+  static _冒号: TokenDelimeter;
+  static _逗号: TokenDelimeter;
+  static _分号: TokenDelimeter;
+  static _DEFAULT: TokenDelimeter;
+
+  static {
+    TokenDelimeter._左圆括号 = this.newInstance("(", TokenDelimeters.左圆括号);
+    TokenDelimeter._右圆括号 = this.newInstance(")", TokenDelimeters.右圆括号);
+    TokenDelimeter._左花括号 = this.newInstance("{", TokenDelimeters.左花括号);
+    TokenDelimeter._右花括号 = this.newInstance("}", TokenDelimeters.右花括号);
+    TokenDelimeter._冒号 = this.newInstance(":", TokenDelimeters.冒号);
+    TokenDelimeter._逗号 = this.newInstance(",", TokenDelimeters.逗号);
+    TokenDelimeter._分号 = this.newInstance(";", TokenDelimeters.分号);
+    TokenDelimeter._DEFAULT = this.newInstance("DEFAULT", TokenDelimeters.DEFAULT);
+  }
 
   private constructor(value: string | number, type: TokenDelimeters) {
     super(value, type);
@@ -30,7 +41,7 @@ export class TokenDelimeter extends TokenType<TokenDelimeters> {
   }
 
 
-  private get分隔符(): RegExp {
+  private static get分隔符(): RegExp {
     let 分隔符arr = []
     for (const key in TokenDelimeters) {
       if (key != TokenDelimeters.DEFAULT) {
@@ -41,7 +52,7 @@ export class TokenDelimeter extends TokenType<TokenDelimeters> {
     // return /^[(){},;:]/;
   }
 
-  private REGEXP: { [key in any]: RegExp } = {
+  private static REGEXP: { [key in any]: RegExp } = {
     [TokenDelimeters.左圆括号]: /^\(/,
     [TokenDelimeters.右圆括号]: /^\)/,
     [TokenDelimeters.左花括号]: /^\{/,
@@ -52,26 +63,51 @@ export class TokenDelimeter extends TokenType<TokenDelimeters> {
     [TokenDelimeters.DEFAULT]: this.get分隔符()
   };
 
-  private VALUE: TokenDelimeter[] = [
-    TokenDelimeter.左圆括号,
-    TokenDelimeter.右圆括号,
-    TokenDelimeter.左花括号,
-    TokenDelimeter.右花括号,
-    TokenDelimeter.冒号,
-    TokenDelimeter.逗号,
-    TokenDelimeter.分号
+  private static VALUE: TokenDelimeter[] = [
+    TokenDelimeter._左圆括号,
+    TokenDelimeter._右圆括号,
+    TokenDelimeter._左花括号,
+    TokenDelimeter._右花括号,
+    TokenDelimeter._冒号,
+    TokenDelimeter._逗号,
+    TokenDelimeter._分号
   ]
 
   public regExp(): RegExp {
-    return this.REGEXP[this.type];
+    return TokenDelimeter.REGEXP[this.type];
   }
 
   public of(value: string): TokenDelimeter {
-    for (const delimiter of this.VALUE) {
+    for (const delimiter of TokenDelimeter.VALUE) {
       if (delimiter.value === value) {
         return delimiter
       }
     }
-    return TokenDelimeter.DEFAULT;
+    return TokenDelimeter._DEFAULT;
+  }
+
+  public 左圆括号(): TokenDelimeter {
+    return TokenDelimeter._左圆括号;
+  }
+  public 右圆括号(): TokenDelimeter {
+    return TokenDelimeter._右圆括号;
+  }
+  public 左花括号(): TokenDelimeter {
+    return TokenDelimeter._左花括号;
+  }
+  public 右花括号(): TokenDelimeter {
+    return TokenDelimeter._右花括号;
+  }
+  public 冒号(): TokenDelimeter {
+    return TokenDelimeter._冒号;
+  }
+  public 逗号(): TokenDelimeter {
+    return TokenDelimeter._逗号;
+  }
+  public 分号(): TokenDelimeter {
+    return TokenDelimeter._分号;
+  }
+  public static DEFAULT(): TokenDelimeter {
+    return TokenDelimeter._DEFAULT;
   }
 }

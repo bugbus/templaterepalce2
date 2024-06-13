@@ -23,18 +23,17 @@ describe('TokenTypes Test', () => {
 
     it('字符串', () => {
       expect(TokenTypes.字符串.regExp()
-      ).toEqual(/^("(?:\\.|[^"\\])*")|('(?:\\.|[^"\\])*')/);
+      ).toEqual(/^'([^']*)'|"([^"]*)"/);
     })
     it('运算符', () => {
       expect(TokenTypes.运算符.regExp()
       ).toEqual(/[+\-*/=<>!&|]/);
     })
 
-    // it('分隔符', () => {
-    //   expect(TokenTypes.分隔符.regExp()
-    //   ).toEqual(/[+\-*/=<>!&|]/);
-    // })
-
+    it('分隔符', () => {
+      expect(TokenTypes.分隔符.regExp()
+      ).toEqual(/^[(){}:,;]/);
+    })
 
     it('意外字符', () => {
       expect(TokenTypes.意外字符.regExp()

@@ -5,3 +5,5 @@ npm install
 
 npx jest
 npx jest code/test/DoinputToToken.test.ts
+
+npx jest code/test/DoinputToToken.test.ts > jest-results.txt 2>&1

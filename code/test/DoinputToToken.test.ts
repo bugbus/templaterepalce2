@@ -121,5 +121,28 @@ describe('返回捕获组的数组，like python 的 match.group()', () => {
 
       expect(underTest.get位置()).toBe(36);
     });
+
+    it.only('tokenize', () => {
+      const test1 = "test111{write('asdasd'{c1r1}'123123'):20}test2222"
+      const outArr = underTest.tokenize(
+        test1
+      )
+
+      expect(outArr[0]).toEqual(new Token(TokenTypes.标识符, "test111"))
+      expect(outArr[1]).toEqual(new Token(TokenTypes.分隔符.左花括号(), "{"))
+      expect(outArr[2]).toEqual(new Token(TokenTypes.标识符, "write"))
+      expect(outArr[3]).toEqual(new Token(TokenTypes.分隔符.左圆括号(), "("))
+      expect(outArr[4]).toEqual(new Token(TokenTypes.字符串, "asdasd"))
+      expect(outArr[5]).toEqual(new Token(TokenTypes.分隔符.左花括号(), "{"))
+      expect(outArr[6]).toEqual(new Token(TokenTypes.标识符, "c1r1"))
+      expect(outArr[7]).toEqual(new Token(TokenTypes.分隔符.右花括号(), "}"))
+      expect(outArr[8]).toEqual(new Token(TokenTypes.字符串, "123123"))
+      expect(outArr[9]).toEqual(new Token(TokenTypes.分隔符.右圆括号(), ")"))
+      expect(outArr[10]).toEqual(new Token(TokenTypes.分隔符.冒号(), ":"))
+      expect(outArr[11]).toEqual(new Token(TokenTypes.数字, "20"))
+      expect(outArr[12]).toEqual(new Token(TokenTypes.分隔符.右花括号(), "}"))
+      expect(outArr[13]).toEqual(new Token(TokenTypes.标识符, "test2222"))
+
+    });
   });
 });

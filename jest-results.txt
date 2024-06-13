@@ -1,0 +1,63 @@
+FAIL code/test/DoinputToToken.test.ts
+  返回捕获组的数组，like python 的 match.group()
+    match标识符
+      ○ skipped match标识符
+      ○ skipped match标识符
+    match匹配空白字符
+      ○ skipped match标识符
+      ○ skipped match标识符
+    match匹配 字符串
+      ○ skipped 单引号 字符串
+      ○ skipped 双引号 字符串
+    tokenize
+      ✕ tokenize (10 ms)
+      ○ skipped tokenize 数字
+      ○ skipped tokenize 标识符
+      ○ skipped tokenize 字符串 无转译
+      ○ skipped tokenize
+
+  ● 返回捕获组的数组，like python 的 match.group() › tokenize › tokenize
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 3
+    + Received  + 3
+
+    @@ -1,7 +1,7 @@
+      Token {
+    -   "值": "{",
+    +   "值": "}",
+        "列号": "0",
+        "类型": TokenDelimeter {
+          "REGEXP": Object {
+            "(": /^\(/,
+            ")": /^\)/,
+    @@ -16,10 +16,10 @@
+          "get分隔符": [Function anonymous],
+          "is": [Function anonymous],
+          "of": [Function anonymous],
+          "regExp": [Function anonymous],
+          "setValue": [Function anonymous],
+    -     "type": "DEFAULT",
+    -     "value": "DEFAULT",
+    +     "type": "}",
+    +     "value": "}",
+        },
+        "行号": "0",
+      }
+
+      131 |
+      132 |       expect(outArr[0]).toEqual(new Token(TokenTypes.标识符, "test111"))
+    > 133 |       expect(outArr[1]).toEqual(new Token(TokenTypes.分隔符, "{"))
+          |                         ^
+      134 |       // expect(outArr[2]).toEqual(new Token(TokenTypes.标识符, "write"))
+      135 |       // expect(outArr[3]).toEqual(new Token(TokenTypes.分隔符, "("))
+      136 |       // expect(outArr[4]).toEqual(new Token(TokenTypes.字符串, "asdasd"))
+
+      at Object.<anonymous> (code/test/DoinputToToken.test.ts:133:25)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 10 skipped, 11 total
+Snapshots:   0 total
+Time:        2.759 s, estimated 3 s
+Ran all test suites matching /code\/test\/DoinputToToken.test.ts/i.

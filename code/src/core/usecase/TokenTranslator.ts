@@ -25,6 +25,9 @@ export class TokenTranslator {
     identifier = this.match标识符(input);
     if (identifier) return identifier;
 
+    identifier = this.match分隔符(input);
+    if (identifier) return identifier;
+
     identifier = this.match数字(input);
     if (identifier) return identifier;
 

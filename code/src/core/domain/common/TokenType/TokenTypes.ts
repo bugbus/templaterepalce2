@@ -18,7 +18,7 @@ export class TokenTypes extends TokenType<TokenAllType> {
   static 数字: TokenTypes = this.newInstance(0, TokenAllType.数字);
   static 字符串: TokenTypes = this.newInstance("", TokenAllType.字符串);
   static 运算符: TokenTypes = this.newInstance("", TokenAllType.运算符);
-  static 分隔符: TokenDelimeter = TokenDelimeter.DEFAULT;
+  static 分隔符: TokenDelimeter = TokenDelimeter.DEFAULT();
   static 意外字符: TokenTypes = this.newInstance("", TokenAllType.意外字符);
 
   private REGEXP: { [key in any]: RegExp } = {
@@ -27,7 +27,7 @@ export class TokenTypes extends TokenType<TokenAllType> {
     [TokenAllType.数字]: /^\d+(\.\d+)?/,
     [TokenAllType.字符串]: this.get字符串(), // 简单的双引号字符串，不支持转义  
     [TokenAllType.运算符]: /[+\-*/=<>!&|]/, // 示例操作符集合  
-    [TokenAllType.分隔符]: TokenDelimeter.DEFAULT.regExp(), // 示例操作符集合  
+    [TokenAllType.分隔符]: TokenDelimeter.DEFAULT().regExp(), // 示例操作符集合  
     [TokenAllType.意外字符]: /^./, // 示例操作符集合  
     // ... 其他类型的正则表达式  
   };
@@ -40,7 +40,8 @@ export class TokenTypes extends TokenType<TokenAllType> {
     return /^[a-zA-Z_][a-zA-Z0-9_]*/;
   }
   private get字符串(): RegExp{
-    return /^("(?:\\.|[^"\\])*")|('(?:\\.|[^"\\])*')/;
+    // return /^("(?:\\.|[^"\\])*")|('(?:\\.|[^"\\])*')/;
+    return /^'([^']*)'|"([^"]*)"/
   }
 
   private constructor(value: string | number, type: TokenAllType) {
