@@ -10,7 +10,7 @@
     "Other"
   ],
   "activationEvents": [],
-  "main": ".code/src/extension.ts",
+  "main": "./code/dist/src/extension.js",
 	"contributes": {
 		"configuration": [
 			{
