@@ -1,22 +1,24 @@
 
 
-import { ASTNode } from '../domain/common/ASTNode/ASTNode';
-import { IToken } from '../domain/common/Token/Token';
-import { TokenType } from '../domain/common/TokenType/TokenType';
-import { TokenTypes } from '../domain/common/TokenType/TokenTypes';
+import { ASTNode } from '../domain/model/ASTNode/ASTNode';
+import { IToken } from '../domain/model/Token/Token';
+import { TokenType } from '../domain/model/TokenType/TokenType';
+import { TokenTypes } from '../domain/model/TokenType/TokenTypes';
+import { Service } from 'typedi';
 
-
-
+@Service()
 export class StatementTranslator {
 
-  private tokens: IToken[]; // 假设这是从词法分析器获取的token数组  
+  private tokens: IToken[] = []; // 假设这是从词法分析器获取的token数组  
   private currentIndex = 0; // 当前正在处理的token索引 
 
-  constructor(tokens: IToken[]) {
-    this.tokens = tokens;
-  }
+  // constructor(tokens: IToken[]) {
+  //   this.tokens = tokens;
+  // }
 
-  parse(): any {
+  parse(tokens: IToken[]): ASTNode.Program {
+    this.tokens = tokens;
+    this.currentIndex = 0;
     return this.p_program();
   }
 
@@ -24,8 +26,11 @@ export class StatementTranslator {
   public p_program(): ASTNode.Program {
     const statements: ASTNode.Block[] = [];
     while (!this.isEndOfFile()) {
-
-      statements.push(this.pBlock());
+      if (this.checkToken(TokenTypes.标识符)) {
+        statements.push(this.P_text());
+      } else if (this.checkToken('{')) {
+        statements.push(this.pBlock());
+      }
     }
     return new ASTNode.Program(statements);
   }
@@ -56,7 +61,7 @@ export class StatementTranslator {
         throw new Error(`Unexpected token: ${this.currentToken().类型}`);
     }
   }
-  
+
   public p_statement_write(): ASTNode.Statement {
     // write_statement : Write write_body
     this.consumeToken(TokenTypes.关键字.WRITE());
@@ -66,10 +71,10 @@ export class StatementTranslator {
     while (!this.checkToken(')')) {
       if (this.is带参String()) {
         args.push(this.p_expr_string_age());
-      } else if(this.currentToken().类型 === TokenTypes.字符串){
+      } else if (this.currentToken().类型 === TokenTypes.字符串) {
         args.push(this.p_expr_string());
       }
-      else if(this.checkToken('{')) {
+      else if (this.checkToken('{')) {
         args.push(this.pBlock());
       }
 
@@ -93,6 +98,9 @@ export class StatementTranslator {
   private p_expr_string(): ASTNode.StringLiteral {
     return new ASTNode.StringLiteral(this.consumeToken(TokenTypes.字符串).值);
   }
+  private P_text(): ASTNode.Text {
+    return new ASTNode.Text(this.consumeToken(TokenTypes.标识符).值);
+  }
 
   public ensueArray(value: any): any[] {
     return Array.isArray(value) ? value : [value];
@@ -100,12 +108,12 @@ export class StatementTranslator {
 
 
   // 检查下一个标记是否为给定类型
-  private checkToken(value: string|TokenType<any>): boolean {
-      return this.currentToken().类型.is(value);
+  private checkToken(value: string | TokenType<any>): boolean {
+    return this.currentToken().类型.is(value);
   }
 
   // 对当前标记做类型检查，如果通过则返回当前标记的值，并消耗当前标记
-  private consumeToken(type: string|TokenType<any>):IToken {
+  private consumeToken(type: string | TokenType<any>): IToken {
     const 当前标记 = this.currentToken()
     if (!this.checkToken(type)) {
       throw new Error(`Expected token: ${type}, but got: ${JSON.stringify(this.currentToken(), null, 2)}`);
@@ -128,11 +136,11 @@ export class StatementTranslator {
   // 回退一个token
   private is带参String(): boolean {
     let tempcurrentIndex = this.currentIndex
-    return this.currentToken().类型 === TokenTypes.字符串 && 
-    this.tokens[++tempcurrentIndex].类型 === TokenTypes.分隔符.冒号() && 
-    this.tokens[++tempcurrentIndex].类型 === TokenTypes.数字
+    return this.currentToken().类型 === TokenTypes.字符串 &&
+      this.tokens[++tempcurrentIndex].类型 === TokenTypes.分隔符.冒号() &&
+      this.tokens[++tempcurrentIndex].类型 === TokenTypes.数字
   }
-  
+
   // 检查是否到达文件末尾
   private isEndOfFile(): boolean {
     return this.currentIndex >= this.tokens.length;

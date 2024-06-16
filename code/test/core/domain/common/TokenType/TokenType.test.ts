@@ -1,4 +1,4 @@
-import { TokenTypes } from "../../../../../src/core/domain/common/TokenType/TokenTypes";
+import { TokenTypes } from "../../../../../src/core/domain/model/TokenType/TokenTypes";
 
 describe('TokenTypes Test', () => {
   describe('正则表达式验证', () => {

@@ -1,4 +1,4 @@
-import { TokenDelimeter } from "../../../../../src/core/domain/common/TokenType/TokenDelimeters";
+import { TokenDelimeter } from "../../../../../src/core/domain/model/TokenType/TokenDelimeters";
 
 
 describe('TokenDelimeter Test', () => {

@@ -1,13 +1,15 @@
 
-import { IToken, Token } from "../domain/common/Token/Token";
-import { TokenTypes } from "../domain/common/TokenType/TokenTypes";
-
-
+import { IToken, Token } from "../domain/model/Token/Token";
+import { TokenTypes } from "../domain/model/TokenType/TokenTypes";
+import { Service } from 'typedi';  
+  
+@Service()  
 export class TokenTranslator {
   private 位置: number = 0;
   
   tokenize(input: string): IToken[] {
     const tokens: IToken[] = [];
+    this.位置 = 0;
     while (this.位置 < input.length) {
       const identifier = this.getNextToken(input);
 

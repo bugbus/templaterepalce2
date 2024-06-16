@@ -1,4 +1,5 @@
-node_modules/*
-code/dist/*
-code/src/mytest/test.tsbk
-
+out
+dist
+node_modules
+.vscode-test/
+*.vsix

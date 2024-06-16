@@ -1,7 +1,7 @@
 // person.test.ts  
-import { TokenType } from '../src/core/domain/common/TokenType/TokenType';
-import { TokenTypes } from '../src/core/domain/common/TokenType/TokenTypes';
-import { Token } from '../src/core/domain/common/Token/Token';
+import { TokenType } from '../src/core/domain/model/TokenType/TokenType';
+import { TokenTypes } from '../src/core/domain/model/TokenType/TokenTypes';
+import { Token } from '../src/core/domain/model/Token/Token';
 import { TokenTranslator } from './../src/core/usecase/TokenTranslator';
 
 describe('返回捕获组的数组，like python 的 match.group()', () => {
@@ -11,13 +11,26 @@ describe('返回捕获组的数组，like python 的 match.group()', () => {
       underTest.set位置(0);
     });
 
-    it('match标识符', () => {
+    it('match标识符 只有半角字符', () => {
       expect(underTest.match标识符(
         "asd123asd     123 asdf123 567 890"
       )).toEqual(
         new Token(TokenTypes.标识符, "asd123asd"));
       expect(underTest.get位置()).toBe(9);
     })
+    // it('match标识符 只有全角字符', () => {
+    //   expect(underTest.match标识符(
+    //     "全角字符包含     123 asdf123 567 890"
+    //   )).toEqual(
+    //     new Token(TokenTypes.标识符, "全角字符包含"));
+    // }) 
+
+    // it('match标识符 全角字符包含', () => {
+    //   expect(underTest.match标识符(
+    //     "asd1全角字符包含23asd     123 asdf123 567 890"
+    //   )).toEqual(
+    //     new Token(TokenTypes.标识符, "asd1全角字符包含23asd"));
+    // })
 
     it('match标识符', () => {
       expect(underTest.match标识符(
@@ -121,7 +134,7 @@ describe('返回捕获组的数组，like python 的 match.group()', () => {
       ]);
     });
 
-    it('tokenize', () => {
+    it('tokenize1', () => {
       expect(underTest.tokenize(
         "   asd123asd     123 asdf123 567 890"
       )).toEqual(
@@ -137,7 +150,7 @@ describe('返回捕获组的数组，like python 的 match.group()', () => {
       expect(underTest.get位置()).toBe(36);
     });
 
-    it('tokenize', () => {
+    it('tokenize2', () => {
       const test1 = "test111{write('asdasd'{c1r1}'123123'):20}test2222"
       const outArr = underTest.tokenize(
         test1

@@ -13,6 +13,7 @@ export namespace ASTNode {
     }
 
     accept(visitor: IInterpreter, context: Context): void {
+      visitor.visitProgram(this, context);
     }
   }
 
@@ -78,6 +79,18 @@ export namespace ASTNode {
     }
     accept(visitor: IInterpreter, context: Context): void {
       visitor.visitStringLiteralAge(this, context);
+    }
+  }
+
+  export class Text extends AbstractASTNode {
+    value: string;
+
+    constructor(value: string, loc?: { start: { line: number, column: number }, end: { line: number, column: number } }) {
+      super('Text', loc);
+      this.value = value;
+    }
+    accept(visitor: IInterpreter, context: Context): void {
+      visitor.visitText(this, context);
     }
   }
 }

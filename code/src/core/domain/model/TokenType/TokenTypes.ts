@@ -41,7 +41,10 @@ export class TokenTypes extends TokenType<TokenAllType> {
   }
 
   private get标识符(): RegExp {
+    // /[\uFF00-\uFFEF]+/
     return /^[a-zA-Z_][a-zA-Z0-9_]*/;
+    // return /^[a-zA-Z_][a-zA-Z0-9_]*｜[\uFF00-\uFFEF]+/;
+    // return /^([a-zA-Z_][a-zA-Z0-9_]*|[\uFF00-\uFFEF]+)/;
   }
   private get字符串(): RegExp{
     // return /^("(?:\\.|[^"\\])*")|('(?:\\.|[^"\\])*')/;
