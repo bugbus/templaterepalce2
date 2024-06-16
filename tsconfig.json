@@ -1,12 +1,12 @@
 {
 	"compilerOptions": {
-		"module": "Node16",
-		"target": "ES2022",
+		"module": "commonjs",
+		"target": "es6",
 		"outDir": "./code/dist",   
 		"experimentalDecorators": true,                   /* Enable experimental support for legacy experimental decorators. */
     "emitDecoratorMetadata": true,  
 		"lib": [
-			"ES2022"
+			"es6"
 		],
 		"types": ["jest"],
 		"sourceMap": true,

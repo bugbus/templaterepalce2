@@ -86,7 +86,10 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "vscode-test"
+    "test": "vscode-test",
+		"clean": "rimraf code/dist code/tsconfig.tsbuildinfo",
+    "build:code": "tsc -p ./tsconfig.json",
+    "build": "npm run clean && npm run build:code"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

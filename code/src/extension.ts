@@ -1,7 +1,12 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import 'reflect-metadata';
 import { FileExplorer } from './core/usecase/fileExplorer';
+import { AnalysisCommand } from './adapt/model/command/AnalysisCommand';
+import Container from 'typedi';
+import { DoAnalysis } from './core/usecase/DoAnalysis';
+import * as fs from 'fs';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -82,8 +87,15 @@ export function activate(context: vscode.ExtensionContext) {
 				lastLine.range.end.character);
 
 		// const testdoc = replaceTarStr(word, node);
-		const testdoc = ""
-
+        console.log(node)
+        let opt: any = {
+          encoding: 'utf-8',
+        };
+        var textValue = fs.readFileSync(node.uri.fsPath, opt).toString();
+		const testdoc2 =new AnalysisCommand(Container.get(DoAnalysis));
+		let testdoc:string = ""
+    testdoc = testdoc2.execute(textValue,"")
+    // const testdoc = ""
 		editor.edit(editBuilder => {
 			editBuilder.replace(textRange, testdoc);
 		});
