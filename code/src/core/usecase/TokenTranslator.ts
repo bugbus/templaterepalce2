@@ -1,6 +1,7 @@
 
+import { IToken, Token } from "../domain/common/Token/Token";
 import { TokenTypes } from "../domain/common/TokenType/TokenTypes";
-import { IToken, Token } from "../domain/Token/Token";
+
 
 export class TokenTranslator {
   private 位置: number = 0;
@@ -21,6 +22,9 @@ export class TokenTranslator {
     let identifier: IToken | null;
 
     if (this.match匹配空白字符(input)) return null;
+
+    identifier = this.match关键字(input);
+    if (identifier) return identifier;
 
     identifier = this.match标识符(input);
     if (identifier) return identifier;
@@ -69,6 +73,17 @@ export class TokenTranslator {
       const value = match[0];
       this.位置 += value.length;
       return new Token(TokenTypes.标识符, value);
+    }
+    return null;
+  }
+
+  public match关键字(input: string): IToken | null {
+    const value = input.substring(this.位置)
+    const match = TokenTypes.关键字.regExp().exec(value);
+    if (match) {
+      const value = match[0];
+      this.位置 += value.length;
+      return new Token(TokenTypes.关键字.of(value), value);
     }
     return null;
   }

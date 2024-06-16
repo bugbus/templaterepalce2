@@ -1,7 +1,7 @@
 // person.test.ts  
 import { TokenType } from '../src/core/domain/common/TokenType/TokenType';
 import { TokenTypes } from '../src/core/domain/common/TokenType/TokenTypes';
-import { Token } from '../src/core/domain/Token/Token';
+import { Token } from '../src/core/domain/common/Token/Token';
 import { TokenTranslator } from './../src/core/usecase/TokenTranslator';
 
 describe('返回捕获组的数组，like python 的 match.group()', () => {
@@ -25,6 +25,21 @@ describe('返回捕获组的数组，like python 的 match.group()', () => {
       )).toBe(null);
 
       expect(underTest.get位置()).toBe(0);
+    })
+  });
+
+  describe('match关键字', () => {
+    const underTest = new TokenTranslator();
+    afterEach(() => {
+      underTest.set位置(0);
+    });
+
+    it('match关键字', () => {
+      expect(underTest.match关键字(
+        "write     123 asdf123 567 890"
+      )).toEqual(
+        new Token(TokenTypes.关键字.WRITE(), "write"));
+      expect(underTest.get位置()).toBe(5);
     })
   });
 
@@ -122,7 +137,7 @@ describe('返回捕获组的数组，like python 的 match.group()', () => {
       expect(underTest.get位置()).toBe(36);
     });
 
-    it.only('tokenize', () => {
+    it('tokenize', () => {
       const test1 = "test111{write('asdasd'{c1r1}'123123'):20}test2222"
       const outArr = underTest.tokenize(
         test1
@@ -130,7 +145,7 @@ describe('返回捕获组的数组，like python 的 match.group()', () => {
 
       expect(outArr[0]).toEqual(new Token(TokenTypes.标识符, "test111"))
       expect(outArr[1]).toEqual(new Token(TokenTypes.分隔符.左花括号(), "{"))
-      expect(outArr[2]).toEqual(new Token(TokenTypes.标识符, "write"))
+      expect(outArr[2]).toEqual(new Token(TokenTypes.关键字.WRITE(), "write"))
       expect(outArr[3]).toEqual(new Token(TokenTypes.分隔符.左圆括号(), "("))
       expect(outArr[4]).toEqual(new Token(TokenTypes.字符串, "asdasd"))
       expect(outArr[5]).toEqual(new Token(TokenTypes.分隔符.左花括号(), "{"))

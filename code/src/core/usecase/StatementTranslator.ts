@@ -1,9 +1,11 @@
 
 
 import { ASTNode } from '../domain/common/ASTNode/ASTNode';
-import {TokenTypes } from '../domain/common/TokenType/TokenTypes';
+import { IToken } from '../domain/common/Token/Token';
+import { TokenType } from '../domain/common/TokenType/TokenType';
+import { TokenTypes } from '../domain/common/TokenType/TokenTypes';
 
-import { IToken } from '../domain/Token/Token';
+
 
 export class StatementTranslator {
 
@@ -14,138 +16,126 @@ export class StatementTranslator {
     this.tokens = tokens;
   }
 
-  public nextToekn(){
-    return this.tokens[this.currentIndex++];
-  }
-
   parse(): any {
     return this.p_program();
   }
 
-  private peek(): IToken {
-    return this.tokens[this.currentIndex];
-  }
+  // 解析整个程序
+  public p_program(): ASTNode.Program {
+    const statements: ASTNode.Block[] = [];
+    while (!this.isEndOfFile()) {
 
-  private next(): IToken {
-    return this.tokens[this.currentIndex++];
-  }
-
-  private expect(token: IToken): void {
-    if (!this.peek().eq(token)) {
-      throw new Error(`Expected ${token}, but found ${this.peek()}`);
+      statements.push(this.pBlock());
     }
-    this.next();
+    return new ASTNode.Program(statements);
   }
 
-  private parseBlock(): Block {
+  public pBlock(): ASTNode.Block {
 
     this.consumeToken("{");
-    const statements: Statement[] = [];
-    while (!this.checkToken('right_brace')) {
-      statements.push(this.parseStatement());
+    const statements: ASTNode.Statement[] = [];
+    while (!this.checkToken('}')) {
+      statements.push(this.pStatement());
     }
     this.consumeToken('}');
-
-    return     new ASTNode.Block('Block', statements);
+    return new ASTNode.Block(statements);
   }
 
-
-
-
-
-  public p_program(p: any[]): void {
+  public pStatement(): ASTNode.Statement {
     // write_statement : Write write_body
-    p[0] = p[1]
-  }
-
-
-  public p_statement_write(p: any[]): void {
-    // write_statement : Write write_body
-    p[0] = p[1]
-  }
-
-  public p_write_body(p: any[]): void {
-    // write_body : exprs
-    p[0] = p[1]
-  }
-
-  public p_exprs(p: any[]): void {
-    // exprs : exprs expr
-    //       | expr
-    if (p.length === 3) {
-
-    }
-    p[0] = p[1]
-  }
-
-  public p_expr_identifier(p: any[]): void {
-    // expr : identifier
-
-    p[0] = p[1]
-  }
-
-  public p_expr_constant(p: any[]): void {
-    // expr : constant
-    this.p_expr_string(p[1])
-    p[0] = p[0]
-  }
-
-  public p_expr_string(p: any[]): void {
-    // constant : string
-    p[0] = new ASTNode.Constant('string', p[1]);
-  }
-
-  public p_statements(p: any[]): void {
-    if (p.length === 3) {
-      p[0] = this.ensueArray(p[1]).concat(p[2]);
-    } else {
-      p[0] = p[1];
+    switch (this.currentToken().类型) {
+      // case 'if_keyword':
+      //   return this.parseIfStatement();
+      // case 'type_keyword':
+      //   return this.parseVariableDeclaration();
+      // case 'for_keyword':
+      //   return this.parseForLoop();
+      case TokenTypes.关键字.WRITE():
+        return this.p_statement_write();
+      default:
+        throw new Error(`Unexpected token: ${this.currentToken().类型}`);
     }
   }
+  
+  public p_statement_write(): ASTNode.Statement {
+    // write_statement : Write write_body
+    this.consumeToken(TokenTypes.关键字.WRITE());
+    this.consumeToken('(');
+    // const args: (ASTNode.StringLiteral | ASTNode.Expression)[] = [];
+    const args: (ASTNode.StringLiteral | ASTNode.Expression)[] = [];
+    while (!this.checkToken(')')) {
+      if (this.is带参String()) {
+        args.push(this.p_expr_string_age());
+      } else if(this.currentToken().类型 === TokenTypes.字符串){
+        args.push(this.p_expr_string());
+      }
+      else if(this.checkToken('{')) {
+        args.push(this.pBlock());
+      }
 
-  public p_statement(p: any[]): void {
-    // statement : if_statement
-    p[0] = p[1]
+      if (!this.checkToken(')')) {
+        // this.consumeToken('comma');
+      }
+    }
+    this.consumeToken(')');
+    return new ASTNode.Statement('write', args);
   }
 
+  private p_expr_string_age(): ASTNode.StringLiteral {
 
-  public p_empty(p: any[]): void {
-    return;
+    return new ASTNode.StringLiteralAge(
+      this.consumeToken(TokenTypes.字符串).值,
+      this.consumeToken(':').值,
+      this.consumeToken(TokenTypes.数字).值
+    );
   }
 
-
+  private p_expr_string(): ASTNode.StringLiteral {
+    return new ASTNode.StringLiteral(this.consumeToken(TokenTypes.字符串).值);
+  }
 
   public ensueArray(value: any): any[] {
     return Array.isArray(value) ? value : [value];
   }
 
 
-    // 检查下一个标记是否为给定类型
-    private checkToken(value: string): boolean {
+  // 检查下一个标记是否为给定类型
+  private checkToken(value: string|TokenType<any>): boolean {
       return this.currentToken().类型.is(value);
+  }
+
+  // 对当前标记做类型检查，如果通过则返回当前标记的值，并消耗当前标记
+  private consumeToken(type: string|TokenType<any>):IToken {
+    const 当前标记 = this.currentToken()
+    if (!this.checkToken(type)) {
+      throw new Error(`Expected token: ${type}, but got: ${JSON.stringify(this.currentToken(), null, 2)}`);
+
     }
+    this.nextToken();
+    return 当前标记;
+  }
+
+  // 获取当前标记
+  private currentToken(): IToken {
+    return this.tokens[this.currentIndex];
+  }
+
+  // 获取下一个标记并前进
+  private nextToken(): IToken {
+    return this.tokens[++this.currentIndex];
+  }
+
+  // 回退一个token
+  private is带参String(): boolean {
+    let tempcurrentIndex = this.currentIndex
+    return this.currentToken().类型 === TokenTypes.字符串 && 
+    this.tokens[++tempcurrentIndex].类型 === TokenTypes.分隔符.冒号() && 
+    this.tokens[++tempcurrentIndex].类型 === TokenTypes.数字
+  }
   
-    // 消耗并返回下一个标记，如果类型不匹配则抛出错误
-    private consumeToken(value: string): IToken {
-      if (!this.checkToken(value)) {
-        throw new Error(`Expected token: ${value}, but got: ${this.currentToken().类型}`);
-      }
-      return this.nextToken();
-    }
-  
-    // 获取当前标记
-    private currentToken(): IToken {
-      return this.tokens[this.currentIndex];
-    }
-  
-    // 获取下一个标记并前进
-    private nextToken(): IToken {
-      return this.tokens[++this.currentIndex];
-    }
-  
-    // 检查是否到达文件末尾
-    private isEndOfFile(): boolean {
-      return this.currentIndex >= this.tokens.length;
-    }
+  // 检查是否到达文件末尾
+  private isEndOfFile(): boolean {
+    return this.currentIndex >= this.tokens.length;
+  }
 }
 

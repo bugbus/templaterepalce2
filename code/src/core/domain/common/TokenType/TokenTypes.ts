@@ -1,8 +1,10 @@
 import { TokenDelimeter } from "./TokenDelimeters";
+import { TokenKeyword } from "./TokenKeyword";
 import { TokenType } from "./TokenType";
 
 enum TokenAllType {
   空白 = "空白",
+  关键字 = "关键字",
   标识符 = "标识符",
   数字 = "数字",
   字符串 = "字符串",
@@ -14,6 +16,7 @@ enum TokenAllType {
 export class TokenTypes extends TokenType<TokenAllType> {
 
   static 空白: TokenTypes = this.newInstance("", TokenAllType.空白);
+  static 关键字: TokenKeyword = TokenKeyword.DEFAULT();
   static 标识符: TokenTypes = this.newInstance("", TokenAllType.标识符);
   static 数字: TokenTypes = this.newInstance(0, TokenAllType.数字);
   static 字符串: TokenTypes = this.newInstance("", TokenAllType.字符串);
@@ -23,8 +26,9 @@ export class TokenTypes extends TokenType<TokenAllType> {
 
   private REGEXP: { [key in any]: RegExp } = {
     [TokenAllType.空白]: /^\s+/,
+    [TokenAllType.关键字]: TokenKeyword.DEFAULT().regExp(),
     [TokenAllType.标识符]: this.get标识符(),
-    [TokenAllType.数字]: /^\d+(\.\d+)?/,
+    [TokenAllType.数字]: /^-?\d+(\.\d+)?/,
     [TokenAllType.字符串]: this.get字符串(), // 简单的双引号字符串，不支持转义  
     [TokenAllType.运算符]: /[+\-*/=<>!&|]/, // 示例操作符集合  
     [TokenAllType.分隔符]: TokenDelimeter.DEFAULT().regExp(), // 示例操作符集合  

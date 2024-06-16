@@ -18,7 +18,7 @@ describe('TokenTypes Test', () => {
 
     it('数字', () => {
       expect(TokenTypes.数字.regExp()
-      ).toEqual(/^\d+(\.\d+)?/);
+      ).toEqual(/^-?\d+(\.\d+)?/);
     })
 
     it('字符串', () => {

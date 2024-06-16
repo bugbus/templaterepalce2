@@ -1,4 +1,5 @@
-import { TokenType } from '../common/TokenType/TokenType';
+import { TokenType } from "../TokenType/TokenType";
+
 
 export interface IToken {
   类型: TokenType<any>;

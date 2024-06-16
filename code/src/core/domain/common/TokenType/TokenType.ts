@@ -14,7 +14,15 @@ export class TokenType<T> extends AbstractTokenType<T>{
     this.value = value;
   }
 
-  is(value:string){
-    return this.value === value
+  is(value: string|TokenType<any>){
+    if(typeof value === 'string'){
+      return this.value === value
+    }else{
+      return this.type === value.type;
+    }
+  }
+
+  isStringType(){
+    return this.type === '字符串';
   }
 }
