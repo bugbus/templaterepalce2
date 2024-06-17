@@ -25,7 +25,7 @@ export class DoAnalysis implements IDoAnalysis {
     // 否则返回字符
     let tokens = this.tokenTranslator.tokenize(input);
     let astNode = this.statementTranslator.parse(tokens);
-    let result = this.interpreterTranslator.interpret([astNode]);
+    let result = this.interpreterTranslator.interpret([astNode],data);
     outputPort.onSuccess(result);
   }
 }

@@ -56,7 +56,7 @@ describe('返回捕获组的数组，like python 的 match.group()', () => {
     })
   });
 
-  describe('match匹配空白字符', () => {
+  describe.only('match匹配空白字符', () => {
     const underTest = new TokenTranslator();
     afterEach(() => {
       underTest.set位置(0);
@@ -68,15 +68,15 @@ describe('返回捕获组的数组，like python 的 match.group()', () => {
       )).toBe(false);
 
       expect(underTest.get位置()).toBe(0);
-    }),
+    })
 
-      it('match标识符', () => {
-        expect(underTest.match匹配空白字符(
-          "  asd123asd     123 asdf123 567 890"
-        )).toBe(true);
+    it('match标识符', () => {
+      expect(underTest.match匹配空白字符(
+        "  asd123asd     123 asdf123 567 890"
+      )).toBe(true);
 
-        expect(underTest.get位置()).toBe(2);
-      })
+      expect(underTest.get位置()).toBe(2);
+    })
   });
 
   describe('match匹配 字符串', () => {

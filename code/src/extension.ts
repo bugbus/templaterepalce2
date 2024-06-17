@@ -87,15 +87,17 @@ export function activate(context: vscode.ExtensionContext) {
 				lastLine.range.end.character);
 
 		// const testdoc = replaceTarStr(word, node);
-        console.log(node)
-        let opt: any = {
-          encoding: 'utf-8',
-        };
-        var textValue = fs.readFileSync(node.uri.fsPath, opt).toString();
-		const testdoc2 =new AnalysisCommand(Container.get(DoAnalysis));
-		let testdoc:string = ""
-    testdoc = testdoc2.execute(textValue,"")
-    // const testdoc = ""
+		console.log(node)
+		let opt: any = {
+			encoding: 'utf-8',
+		};
+		var input = fs.readFileSync(node.uri.fsPath, opt).toString();
+		const testdoc2 = new AnalysisCommand(Container.get(DoAnalysis));
+		let testdoc: string = ""
+		//todo 循环先写到这里
+		
+		testdoc = testdoc2.execute(input, word)
+		// const testdoc = ""
 		editor.edit(editBuilder => {
 			editBuilder.replace(textRange, testdoc);
 		});

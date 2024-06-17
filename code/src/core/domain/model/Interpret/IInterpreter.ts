@@ -9,5 +9,6 @@ export interface IInterpreter {
   visitStringLiteral(node: ASTNode.StringLiteral,context: Context): void;
   visitStringLiteralAge(node: ASTNode.StringLiteralAge,context: Context): void;
   visitText(node: ASTNode.Text,context: Context): void;
+  visitIdentifier(node: ASTNode.Identifier,context: Context): void;
 }
 

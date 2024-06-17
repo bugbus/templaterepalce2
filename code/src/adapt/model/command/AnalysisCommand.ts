@@ -74,4 +74,5 @@ export class AnalysisCommand {
 
     return variable;
   }
+
 }

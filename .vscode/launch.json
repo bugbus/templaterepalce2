@@ -16,6 +16,21 @@
 				"${workspaceFolder}/code/dist/**/*.js"
 			],
 			"preLaunchTask": "${defaultBuildTask}"
-		}
+		},
+		{  
+      "type": "node",  
+      "request": "launch",  
+      "name": "Jest Tests",  
+      "program": "${workspaceFolder}/node_modules/.bin/jest",  
+      "args": [  
+        "--runInBand" // 如果你的测试是异步的，可能需要这个选项来确保它们在单个进程中按顺序运行  
+      ],  
+      "console": "integratedTerminal",  
+      "internalConsoleOptions": "neverOpen",  
+
+      "windows": {  
+        "program": "${workspaceFolder}/node_modules/jest/bin/jest.js"  
+      }  
+    }  
 	]
 }

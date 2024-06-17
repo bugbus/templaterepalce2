@@ -18,6 +18,7 @@ export namespace ASTNode {
   }
 
   export class Block extends AbstractASTNode {
+    length: number = 0;
     constructor(children: AbstractASTNode[], loc?: { start: { line: number, column: number }, end: { line: number, column: number } }) {
       super('Block', loc);
       this.children = children;
@@ -29,11 +30,11 @@ export namespace ASTNode {
   }
 
   export class Statement extends AbstractASTNode {
-    name: string;
-
-    constructor(name: string, children: AbstractASTNode[], loc?: { start: { line: number, column: number }, end: { line: number, column: number } }) {
+    value: string;
+    length: number = 0;
+    constructor(value: string, children: AbstractASTNode[], loc?: { start: { line: number, column: number }, end: { line: number, column: number } }) {
       super('Statement', loc);
-      this.name = name;
+      this.value = value;
       this.children = children;
     }
     accept(visitor: IInterpreter, context: Context): void {
@@ -84,7 +85,7 @@ export namespace ASTNode {
 
   export class Text extends AbstractASTNode {
     value: string;
-
+    length: number = 0;
     constructor(value: string, loc?: { start: { line: number, column: number }, end: { line: number, column: number } }) {
       super('Text', loc);
       this.value = value;
@@ -93,5 +94,20 @@ export namespace ASTNode {
       visitor.visitText(this, context);
     }
   }
+
+  export class Identifier extends AbstractASTNode {
+    value: string;
+    length: number = 0;
+    constructor(value: string, temp: string, length: string, loc?: { start: { line: number, column: number }, end: { line: number, column: number } }) {
+      super('Identifier', loc);
+      this.value = value;
+      this.length = Number(length);
+      this.children = [];
+    }
+    accept(visitor: IInterpreter, context: Context): void {
+      visitor.visitIdentifier(this, context);
+    }
+  }
+  
 }
 
