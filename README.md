@@ -1,71 +1,54 @@
 # template-replace README
 
-This is the README for your extension "template-replace". After writing up a brief description, we recommend including the following sections.
+## 功能简介：
+这个插件是替换模版文件中的变量，多行对多行。
+  
+## 已经实现语法
+{c1r1}
+{c1r1:n}
+{c1r1:-n}
+{"string":-n}
+{write("string")}
+{write({c1r1})}
 
-## Features
+### 一个是模版文件：
+  
+比如下面这种
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+```
+public {r1c1} get{r1c2}(){
+    return this.{r1c2};
+} 
+```
 
-For example if there is an image subfolder under your extension project workspace:
+  
+### 另一个文件像这样：
+  
+这个文件需要临时打开一份。（⇧⌘ N/ctrl N）
+并放入值。
+```
+String	fun1
+int	fun2
+```
+中间用[\t]制表符分割。
 
-\!\[feature X\]\(images/feature-x.png\)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
-## Requirements
+点击’=>'后就生成了  （将鼠标放到模版文件上就能看到‘=>’了）
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+```
+public String getfun1(){
+    return this.fun1;
+} 
+public int getfun2(){
+    return this.fun2;
+} 
 
-## Extension Settings
+```
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+{r1c1}  
+r是行，c是列的意思。r1c1是第一行第一列的那个字符串，用[\t]制表符分割  
+r1c2,r2c2...等等。  
 
 **Enjoy!**

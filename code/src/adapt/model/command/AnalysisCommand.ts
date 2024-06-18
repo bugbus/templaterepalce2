@@ -13,22 +13,34 @@ export class AnalysisCommand {
     input: string,
     data: string
   ): string {
+    const maxRNumber = this.findMaxRNumber(input);
+    const maxLineCount = this.getMaxLineCount(data);
+    let loopCount = 1;
     let result = ""
-    this.extractAllContents(input).forEach(item => {
-      if (this.isBlock(item)) {
-        result += this.process(item, data)
-      } else {
-        result += item
-      }
-    });
+
+    if (maxLineCount > maxRNumber && maxLineCount % maxRNumber === 0) {
+      loopCount = maxLineCount / maxRNumber
+    }
+
+    for (let i = 0; i < loopCount; i++) {
+      const dataslice = this.readInputFile(data).slice(i * maxRNumber, i * maxRNumber + maxRNumber)
+      this.extractAllContents(input).forEach(item => {
+        if (this.isBlock(item)) {
+          result += this.process(item, dataslice)
+        } else {
+          result += item
+        }
+      });
+    }
+
     return result;
   }
 
-  public process(str: string, data: string): string {
+  public process(str: string, data: Array<Array<string>>): string {
     let out = ""
     this.doAnalysis.execute(
       str,
-      this.readInputFile(data),
+      data,
       {
         onFailure() {
 
@@ -73,6 +85,74 @@ export class AnalysisCommand {
     // this.variableMaxRow = variable.length;  
 
     return variable;
+  }
+
+  public findMaxRNumber2(input: string): number {
+    // 正则表达式用于匹配"{c[0-9]+r[0-9]+}" 或 "{r[0-9]+c[0-9]+}" 模式  
+    // 并捕获r后面的数字  
+    const regex = /\{([rc])(\d+)([rc])(\d+)\}/;
+    /\{([rc])(\d+)([rc])\d+\}/g
+    let maxRNumber = -1;
+
+    let match;
+    while ((match = regex.exec(input)) !== null) {
+      // 因为我们可能有两种模式，我们需要检查哪个组被捕获了  
+      const [, , rNumber1, rNumber2] = match;
+      let rNumber: number;
+      if (rNumber1) {
+        rNumber = parseInt(rNumber1, 10); // 如果第一个捕获组有值  
+      } else {
+        rNumber = parseInt(rNumber2, 10); // 如果第二个捕获组有值  
+      }
+      // 更新最大值  
+      if (rNumber > maxRNumber) {
+        maxRNumber = rNumber;
+      }
+    }
+
+    // 如果找到了任何匹配项，则返回最大值，否则返回0  
+    return maxRNumber === -1 ? 0 : maxRNumber;
+  }
+
+  public findMaxRNumber(input: string): number {
+    // 正则表达式，匹配 "{r数字c数字}" 或 "{c数字r数字}" 的模式，并捕获数字  
+    const regex = /\{([rc])(\d+)([rc])(\d)+\}/g;
+    let maxRValue = 0;
+    let match;
+    while ((match = regex.exec(input)) !== null) {
+      const [, direction1, index1, direction2, index2] = match;
+      const rowIndex = direction1 === 'r' ? parseInt(index1, 10) : parseInt(index2, 10);
+
+      if (maxRValue === 0 || rowIndex > maxRValue) {
+        maxRValue = rowIndex;
+      }
+      // 注意：我们不处理 "c" 开头的匹配项，因为我们只关心 "r" 后面的数字  
+    }
+
+    return maxRValue;
+  }
+
+  public getMaxLineCount(data: string): number {
+    // 移除字符串开头和结尾的空白字符，以避免计算不必要的空行  
+    data = data.trim();
+
+    // 如果字符串为空，则认为只有一行  
+    if (data.length === 0) {
+      return 1;
+    }
+
+    // 使用正则表达式匹配换行符，并计算匹配到的数量  
+    // 这里使用\n来匹配Unix/Linux风格的换行符，或者使用\r\n来匹配Windows风格的换行符  
+    // 或者使用[\r\n]来匹配两种风格的换行符  
+    const lineCount = (data.match(/\n/g) || []).length;
+
+    // 如果只有一个换行符且其后没有内容，则仍然认为只有一行  
+    if (lineCount === 1 && !/\n[^]/.test(data)) {
+      return 1;
+    }
+
+    // 否则，返回行数（包括第一行）+ 1（因为第一行即使没有换行符也应该被计算在内）  
+    return lineCount + 1;
   }
 
 }

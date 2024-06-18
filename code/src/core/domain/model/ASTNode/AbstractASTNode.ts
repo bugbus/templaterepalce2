@@ -44,7 +44,6 @@ export abstract class AbstractASTNode {
   // }
 
   traverseDebug() {
-    console.log(this); 
     this.children.forEach(child => child.traverseDebug());
   }
 
