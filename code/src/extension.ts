@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	const fileExplorer = new FileExplorer(context);
-	// fileExplorer.createTreeView();
+	fileExplorer.createTreeView();
 
 	context.subscriptions.push(vscode.commands.registerCommand('fileExplorer.openFile', (resource) => {
 		fileExplorer.openResource(resource);
@@ -84,7 +84,6 @@ export function activate(context: vscode.ExtensionContext) {
 				if (!folderUris) {
 					return null;
 				}
-				vscode.workspace.getConfiguration().get
 				vscode.workspace.getConfiguration().update('conf.replace.workSpacePath', folderUris[0].path, vscode.ConfigurationTarget.Global);
 			}).then((value) => {
 				//   vscode.extensions.
@@ -144,7 +143,7 @@ function createFolderInUserDataDir(folderName: string): string {
 			userDataDir = path.join(homeDir, 'AppData', 'Roaming', 'Code', 'User');
 			break;
 		case 'darwin':
-			userDataDir = path.join(homeDir, 'Library', 'Application Support', 'Code', 'User');
+			userDataDir = path.join(homeDir, 'Library', 'Application\ Support', 'Code', 'User');
 			break;
 		default: // 假设是 Linux 或其他 Unix-like 系统  
 			userDataDir = path.join(homeDir, '.config', 'Code', 'User');
