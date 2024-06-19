@@ -1,9 +1,9 @@
 {
   "name": "template-replace",
   "displayName": "template replace",
-	"description": "替换模版文件中的固定字符串",
-  "version": "0.6.1",
-	"publisher": "wangzelin",
+  "description": "替换模版文件中的固定字符串",
+  "version": "0.7.0",
+  "publisher": "wangzelin",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -12,75 +12,75 @@
   ],
   "activationEvents": [],
   "main": "./code/dist/src/extension.js",
-	"contributes": {
-		"configuration": [
-			{
-				"title": "replace",
-				"properties": {
-					"conf.replace.workSpacePath": {
-						"type": "string",
-						"default": "explorer",
-						"description": "工作区域路径",
-						"scope": "window"
-					}
-				}
-			}
-		],
-		"commands": [
-			{
-				"command": "fileExplorer.openFile",
-				"title": "Open File"
-			},
-			{
-				"command": "fileExplorer.openFloder",
-				"title": "Open File"
-			},
-			{
-				"command": "fileExplorer.replace",
-				"title": "=>"
-			},
-			{
-				"command": "config.setWorkSpacePath",
-				"title": "修改工作区域路径"
-			},
-			{
-				"command": "config.addFile",
-				"title": "+"
-			}
-		],
-		"views": {
-			"explorer": [
-				{
-					"id": "fileExplorer",
-					"name": "文本替换脚本"
-				}
-			]
-		},
-		"menus": {
-			"view/title": [
-				{
-					"command": "config.setWorkSpacePath",
-					"when": "view == fileExplorer"
-				},
-				{
-					"command": "config.addFile",
-					"when": "view == fileExplorer",
-					"group": "navigation"
-				}
-			],
-			"view/item/context": [
-				{
-					"command": "fileExplorer.replace",
-					"when": "view == fileExplorer && viewItem == file",
-					"group": "inline"
-				},
-				{
-					"command": "fileExplorer.openFloder",
-					"when": "view == fileExplorer && viewItem == file"
-				}
-			]
-		}
-	},
+  "contributes": {
+    "configuration": [
+      {
+        "title": "replace",
+        "properties": {
+          "conf.replace.workSpacePath": {
+            "type": "string",
+            "default": "explorer",
+            "description": "工作区域路径",
+            "scope": "window"
+          }
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "fileExplorer.openFile",
+        "title": "Open File"
+      },
+      {
+        "command": "fileExplorer.openFloder",
+        "title": "Open File"
+      },
+      {
+        "command": "fileExplorer.replace",
+        "title": "=>"
+      },
+      {
+        "command": "config.setWorkSpacePath",
+        "title": "修改工作区域路径"
+      },
+      {
+        "command": "config.addFile",
+        "title": "+"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "fileExplorer",
+          "name": "文本替换脚本"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "config.setWorkSpacePath",
+          "when": "view == fileExplorer"
+        },
+        {
+          "command": "config.addFile",
+          "when": "view == fileExplorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "fileExplorer.replace",
+          "when": "view == fileExplorer && viewItem == file",
+          "group": "inline"
+        },
+        {
+          "command": "fileExplorer.openFloder",
+          "when": "view == fileExplorer && viewItem == file"
+        }
+      ]
+    }
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
@@ -88,7 +88,7 @@
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "vscode-test",
-		"clean": "rimraf code/dist code/tsconfig.tsbuildinfo",
+    "clean": "rimraf code/dist code/tsconfig.tsbuildinfo",
     "build:code": "tsc -p ./tsconfig.json",
     "build": "npm run clean && npm run build:code"
   },
@@ -114,8 +114,8 @@
     "typedi": "^0.10.0",
     "uuid": "^10.0.0"
   },
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/bugbus/template-replace.git"
-	}
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bugbus/template-replace.git"
+  }
 }
