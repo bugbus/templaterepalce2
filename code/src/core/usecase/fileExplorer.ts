@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import { mkdirp } from 'mkdirp';
-import { rimraf } from 'rimraf';
+// import { rimraf } from 'rimraf';
 // import mkdirp from 'mkdirp';
 // import { rimraf } from 'rimraf';  
 
@@ -104,7 +104,7 @@ namespace _ {
 
 	export function rmrf(path: string): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
-			rimraf(path);
+			// rimraf(path);
 		});
 	}
 
@@ -279,7 +279,7 @@ export class FileSystemProvider implements vscode.TreeDataProvider<Entry>, vscod
 
 	delete(uri: vscode.Uri, options: { recursive: boolean; }): void | Thenable<void> {
 		if (options.recursive) {
-			return _.rmrf(uri.fsPath);
+			// return _.rmrf(uri.fsPath);
 		}
 
 		return _.unlink(uri.fsPath);
@@ -295,7 +295,7 @@ export class FileSystemProvider implements vscode.TreeDataProvider<Entry>, vscod
 			if (!options.overwrite) {
 				throw vscode.FileSystemError.FileExists();
 			} else {
-				await _.rmrf(newUri.fsPath);
+				// await _.rmrf(newUri.fsPath);
 			}
 		}
 
