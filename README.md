@@ -4,12 +4,12 @@
 这个插件是替换模版文件中的变量，多行对多行。
   
 ## 已经实现语法
-{c1r1}
-{c1r1:n}
-{c1r1:-n}
-{"string":-n}
-{write("string")}
-{write({c1r1})}
+* {c1r1}
+* {c1r1:n}
+* {c1r1:-n}
+* {"string":-n}
+* {write("string")}
+* {write({c1r1})}
 
 ### 一个是模版文件：
   
