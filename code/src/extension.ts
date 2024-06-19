@@ -13,11 +13,11 @@ import * as os from 'os';
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	let config = vscode.workspace.getConfiguration("template-replace");
-	let workSpacePath = config.get('conf.replace.workSpacePath', vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '');
+	let config = vscode.workspace.getConfiguration("conf");
+	let workSpacePath = config.get('replace.workSpacePath', vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : '');
 	if (!workSpacePath) {
 		workSpacePath = createFolderInUserDataDir("replaceWorkspace")
-		vscode.workspace.getConfiguration().update('conf.replace.workSpacePath', workSpacePath, vscode.ConfigurationTarget.Global);
+		vscode.workspace.getConfiguration("conf").update('replace.workSpacePath', workSpacePath, vscode.ConfigurationTarget.Global);
 	}
 
 	const fileExplorer = new FileExplorer(context);
